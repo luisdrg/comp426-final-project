@@ -18,12 +18,16 @@ import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import { blue } from '@mui/material/colors';
+import { Link as RouterLink } from 'react-router-dom';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Mood Notes
+        MOOD NOTES
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -85,13 +89,21 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
+      <h1 style={{ fontSize: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: blue[500] }}>
+            MOOD
+            <span style={{ color: 'orange' }}>_</span>
+            NOTES
+            <EditIcon sx={{ ml: 1, fontSize: '3.5rem', color: 'orange', border: '2px solid black' }}/>
+          </h1>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            boxShadow: '0px 0px 10px 2px #00000029',
+            padding: '30px'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -140,9 +152,9 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+              <RouterLink to="/signup" variant="body2">
+                  Don't have an account? Sign Up
+                </RouterLink>
               </Grid>
             </Grid>
           </Box>

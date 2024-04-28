@@ -1,10 +1,11 @@
 import './App.css';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
-import Home from './components/Home';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { auth } from './config/firebase';
 import { useEffect, useState } from 'react';
+import SignUp from './components/SignUp';
+import Notes from './components/Notes';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,13 +24,17 @@ function App() {
       <Router>
         {user && <NavBar />}
         {user ? (
+          <div style={{ paddingTop: '120px' }}>
           <Routes>
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<Notes />} />
+
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
+          </div>
         ) : (
           <Routes>
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/signUp" element={<SignUp />} />
             <Route path="*" element={<Navigate to="/signin" replace />} />
           </Routes>
         )}

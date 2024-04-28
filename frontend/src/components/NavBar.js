@@ -11,11 +11,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import EditIcon from '@mui/icons-material/Edit';
 import { logOut } from '../auth';
+import { auth } from '../config/firebase';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+//const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,10 +40,9 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -56,7 +58,12 @@ function NavBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              MOOD
+              <span style={{ color: 'orange' }}>_</span>
+              NOTES
+              <EditIcon sx={{ ml: 1, fontSize: '2.3rem', color: 'orange', border: '2px solid black' }}/>
+           </h2>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -95,7 +102,6 @@ function NavBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -112,7 +118,12 @@ function NavBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            <h3 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              MOOD
+              <span style={{ color: 'orange' }}>_</span>
+              NOTES
+              <EditIcon sx={{ ml: 1, fontSize: '2.3rem', color: 'orange', border: '2px solid black' }}/>
+           </h3>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -148,6 +159,10 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              Welcome, 
+              <br></br>
+              {auth.currentUser.email}
+              <hr></hr>
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={setting === 'Logout' ? logOut : handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
