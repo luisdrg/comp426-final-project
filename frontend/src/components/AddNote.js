@@ -1,32 +1,33 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
   zIndex: 1,
-  top: 0,
+  top: -30,
   left: 0,
   right: 0,
   margin: '0 auto',
 });
 
-export default function AddNote() {
+export default function Addnote() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -42,54 +43,80 @@ export default function AddNote() {
       <StyledFab color="secondary" aria-label="add" onClick={handleClickOpen}>
         <AddIcon />
       </StyledFab>
-
       <Dialog
-        fullScreen
         open={open}
         onClose={handleClose}
-        TransitionComponent={Transition}
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            console.log(formJson); // Output the form data to console
+            handleClose();
+          },
+        }}
       >
-        <AppBar sx={{ mb: 2, position: 'relative' }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Creating Note
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Save
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Box sx={{ p: 2}}>
-          <TextField 
+        <DialogTitle>Create a Note</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ textAlign: 'center', mt: 3 }}>
+            Write now, reflect later!
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="title"
+            name="Title"
+            label="Title"
+            type="text"
             fullWidth
-            id="standard-basic" 
-            label="Title" 
-            variant="standard" 
-            sx={{ mb: 2 }}
-            InputProps={{ 
-              style: { 
-                fontSize: '20px' 
-              }
-            }}
+            variant="standard"
           />
           <TextField
-            fullWidth
-            id="filled-basic"
+            autoFocus
+            required
+            margin="dense"
+            id="note"
+            name="note"
             label="Note"
-            variant="filled"
+            type="text"
+            fullWidth
+            variant="standard"
             multiline
-            rows={4}
-            sx={{ flexGrow: 1 }}
+            sx={{ mb: 5 }}
           />
-        </Box>
+          <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label" sx={{ mb: 2 }}>
+            What is your mood?
+          </FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="ok"
+              name="mood"
+            >
+              <FormControlLabel 
+                value="bad" 
+                control={<Radio/>} 
+                label={<SentimentVeryDissatisfiedIcon style={{ color: 'red', fontSize: '40px' }} />}
+              />
+              <FormControlLabel 
+                value="ok" 
+                control={<Radio />} 
+                label={<SentimentDissatisfiedIcon style={{ color: 'gray', fontSize: '40px' }} />}
+              />
+              <FormControlLabel 
+                value="good" 
+                control={<Radio />} 
+                label={<SentimentSatisfiedIcon style={{ color: 'green', fontSize: '40px' }} />}
+              />
+            </RadioGroup>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Save</Button>
+        </DialogActions>
       </Dialog>
     </React.Fragment>
   );
