@@ -21,6 +21,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+import AddNote from './AddNote';
 
 const data = [
   {
@@ -169,8 +170,9 @@ export default function Notes() {
           <IconButton color="inherit" aria-label="open drawer">
             <MenuIcon />
           </IconButton>
-          <StyledFab color="secondary" aria-label="add" onClick={addNote}>
-            <AddIcon />
+          <StyledFab color="secondary" aria-label="add">
+            {/* <AddIcon /> */}
+            <AddNote/>
           </StyledFab>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton color="inherit">
