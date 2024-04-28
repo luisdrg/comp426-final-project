@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import Fab from '@mui/material/Fab';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -15,13 +13,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import AddNote from './AddNote';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
 const data = [
   {
@@ -68,15 +68,6 @@ const data = [
   },
 ];
 
-const StyledFab = styled(Fab)({
-  position: 'absolute',
-  zIndex: 1,
-  top: -30,
-  left: 0,
-  right: 0,
-  margin: '0 auto',
-});
-
 export default function Notes() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notes, setNotes] = useState(data);
@@ -94,6 +85,8 @@ export default function Notes() {
 
   const editNote = (id) => () => {
     console.log(id);
+    const note = data.find(note => note.id === id);
+    console.log(note.mood);
     handleClose();  // Ensure to close the menu after viewing
   };
 
@@ -108,20 +101,20 @@ export default function Notes() {
   };
 
    // Function to add a new note
-   const addNote = () => {
-    const newNote = {
-      id: notes.length + 1, // Assign a new ID
-      primary: 'New Note',
-      secondary: 'Description of the new note',
-      mood: 'good' // You can set a default or make this dynamic
-    };
-    setNotes([...notes, newNote]);
-  };
+  //  const addNote = () => {
+  //   const newNote = {
+  //     id: notes.length + 1, // Assign a new ID
+  //     primary: 'New Note',
+  //     secondary: 'Description of the new note',
+  //     mood: 'good' // You can set a default or make this dynamic
+  //   };
+  //   setNotes([...notes, newNote]);
+  // };
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <Paper square sx={{ pb: '50px' }}>
+      <Paper square sx={{ pb: '50px', maxWidth: '85%', margin: 'auto' }}>
         <Typography variant="h5" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
           Notes
           <hr style={{ borderColor: 'black', width: '100%', margin: '20px auto' }}/>
@@ -143,7 +136,11 @@ export default function Notes() {
 
               <ListItemButton>
                 <ListItemAvatar>
-                  <Avatar alt="Profile Picture" src={`/${mood}.jpg`} />
+                <Avatar sx={{ backgroundColor: 'transparent' }}>
+                  {mood === 'bad' ? <SentimentVeryDissatisfiedIcon style={{ color: 'red', fontSize: '40px' }}/>
+                  : mood === 'ok' ? <SentimentDissatisfiedIcon style={{ color: 'gray', fontSize: '40px' }}/> 
+                  : <SentimentSatisfiedIcon style={{ color: 'green', fontSize: '40px' }}/>}
+                </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={primary} secondary={secondary} />
                 <IconButton color="inherit" onClick={(event) => handleClick(event, id)}>
@@ -170,10 +167,7 @@ export default function Notes() {
           <IconButton color="inherit" aria-label="open drawer">
             <MenuIcon />
           </IconButton>
-          <StyledFab color="secondary" aria-label="add">
-            {/* <AddIcon /> */}
             <AddNote/>
-          </StyledFab>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton color="inherit">
             <SearchIcon />
