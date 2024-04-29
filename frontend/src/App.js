@@ -2,14 +2,15 @@ import './App.css';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { auth } from './config/firebase';
+import { auth, db } from './config/firebase';
 import { useEffect, useState } from 'react';
 import SignUp from './components/SignUp';
 import Notes from './components/Notes';
-
+import EditProfile from './components/EditProfile';
+import CreateProfile from './components/CreateProfile';
 function App() {
   const [user, setUser] = useState(null);
-
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setUser(user);
@@ -26,9 +27,10 @@ function App() {
         {user ? (
           <div style={{ paddingTop: '120px' }}>
           <Routes>
-            <Route path="/home" element={<Notes />} />
-
-            <Route path="*" element={<Navigate to="/home" replace />} />
+            <Route path="/profile" element={<EditProfile />} />
+            <Route path="/create" element={<CreateProfile />} />
+            <Route path="/" element={<Notes />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           </div>
         ) : (

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,6 +16,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import { blue } from '@mui/material/colors';
 import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {createUserWithEmailAndPassword} from 'firebase/auth'
+import { auth } from '../config/firebase';
+import { updateProfile } from "firebase/auth";
 
 function Copyright(props) {
   return (
@@ -29,29 +34,62 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    const isValid = formData.firstName && formData.lastName && formData.email && formData.password;
+    setIsFormValid(isValid);
+  }, [formData]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(formData);
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const email = data.get('email');
+    const password = data.get('password');
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    try{
+      await createUserWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+      await updateProfile(user, { displayName: `${firstName} ${lastName.charAt(0)}` });
+    }catch(err){
+      if (err.code === 'auth/email-already-in-use'){
+        alert('Email already in use. Please log in or recover your password.');
+      }
+      console.error(err);
+    }
+    navigate('/create', { state: { email: email, password: password, firstName: firstName, lastName: lastName } });
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
-      <h1 style={{ fontSize: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: blue[500] }}>
-            MOOD
-            <span style={{ color: 'orange' }}>_</span>
-            NOTES
-            <EditIcon sx={{ ml: 1, fontSize: '3.5rem', color: 'orange', border: '2px solid black' }}/>
-          </h1>
+        <h1 style={{ fontSize: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: blue[500] }}>
+          MOOD
+          <span style={{ color: 'orange' }}>_</span>
+          NOTES
+          <EditIcon sx={{ ml: 1, fontSize: '3.5rem', color: 'orange', border: '2px solid black' }}/>
+        </h1>
         <CssBaseline />
         <Box
           sx={{
@@ -71,48 +109,22 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
+              {['firstName', 'lastName', 'email', 'password'].map((field, index) => (
+                <Grid item xs={12} sm={field === 'email' || field === 'password' ? 12 : 6} key={index}>
+                  <TextField
+                    required
+                    fullWidth
+                    id={field}
+                    label={field.split(/(?=[A-Z])/).join(" ")}  // Split camelCase to separate words
+                    name={field}
+                    autoComplete={field}
+                    type={field === 'password' ? 'password' : 'text'}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    autoFocus={index === 0}
+                  />
+                </Grid>
+              ))}
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -125,6 +137,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!isFormValid}
             >
               Sign Up
             </Button>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,16 +14,39 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import { logOut } from '../auth';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from 'react';
 
 //const pages = ['Products', 'Pricing', 'Blog'];
 const pages = [];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Dashboard', 'Logout'];
 
 
 function NavBar() {
+  const[userData, setUserData] = useState(null);
+
+  // Get user data from firestore collection
+const getUserData = async () => {
+  if (auth.currentUser) {
+    const userRef = doc(db, 'users', auth.currentUser.uid);
+    try {
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        setUserData(docSnap.data()); // Set the user state to the retrieved data
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    } 
+  }
+}
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,6 +61,19 @@ function NavBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleMenuClick = (setting) => {
+    handleCloseUserMenu(); 
+    if (setting === 'Logout') {
+      logOut(); 
+    } else if (setting === 'Profile') {
+      navigate('/profile');
+    } else if (setting === 'Account') {
+      navigate('/account'); 
+    } else if (setting === 'Dashboard') {
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -159,12 +196,12 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              Welcome, 
-              <br></br>
-              {auth.currentUser.email}
-              <hr></hr>
+            <Box ml={2}>
+            {`Hi, ${auth.currentUser.displayName}` || ''}
+            </Box>
+            <hr></hr>
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={setting === 'Logout' ? logOut : handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleMenuClick(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
