@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../config/firebase';
 import { doc, getDoc, setDoc} from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
 
 function EditProfile() {
     const [userData, setUserData] = useState({
@@ -72,6 +73,7 @@ function EditProfile() {
             const userRef = doc(db, 'users', auth.currentUser.uid);
             try {
                 await setDoc(userRef, profile, { merge: true });
+                await updateProfile(auth.currentUser, { displayName: `${profile.firstName} ${profile.lastName.charAt(0)}` });
                 console.log("Document successfully updated!");
             } catch (error) {
                 console.error("Error updating document: ", error);

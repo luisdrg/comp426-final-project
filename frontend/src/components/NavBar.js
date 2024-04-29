@@ -24,7 +24,14 @@ const settings = ['Profile', 'Dashboard', 'Logout'];
 
 
 function NavBar() {
-  const[userData, setUserData] = useState(null);
+  const[userData, setUserData] = useState("");
+  const [displayName, setDisplayName] = useState('');
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      setDisplayName(auth.currentUser.displayName);
+    }
+  }, [auth.currentUser]);
 
   // Get user data from firestore collection
 const getUserData = async () => {
@@ -197,7 +204,7 @@ const getUserData = async () => {
               onClose={handleCloseUserMenu}
             >
             <Box ml={2}>
-            {`Hi, ${auth.currentUser.displayName}` || ''}
+            {`Hi, ${displayName}` || ''}
             </Box>
             <hr></hr>
               {settings.map((setting) => (
