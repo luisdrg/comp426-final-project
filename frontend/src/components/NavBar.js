@@ -14,8 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import { logOut } from '../auth';
-import { auth, db } from '../config/firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from '../config/firebase';
 import { useEffect, useState } from 'react';
 
 //const pages = ['Products', 'Pricing', 'Blog'];
@@ -24,32 +23,14 @@ const settings = ['Profile', 'Dashboard', 'Logout'];
 
 
 function NavBar() {
-  const[userData, setUserData] = useState("");
+
   const [displayName, setDisplayName] = useState('');
 
   useEffect(() => {
     if (auth.currentUser) {
       setDisplayName(auth.currentUser.displayName);
     }
-  }, [auth.currentUser]);
-
-  // Get user data from firestore collection
-const getUserData = async () => {
-  if (auth.currentUser) {
-    const userRef = doc(db, 'users', auth.currentUser.uid);
-    try {
-      const docSnap = await getDoc(userRef);
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        setUserData(docSnap.data()); // Set the user state to the retrieved data
-      } else {
-        console.log("No such document!");
-      }
-    } catch (error) {
-      console.error("Error getting document:", error);
-    } 
-  }
-}
+  }, []);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);

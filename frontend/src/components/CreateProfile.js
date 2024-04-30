@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Stack, Typography, MenuItem, Select, FormControl, InputLabel, Snackbar, Alert } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Stack, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../config/firebase';
 import { useLocation } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
+import { updateProfile } from "firebase/auth";
 
 function CreateProfile() {
 
@@ -31,10 +32,11 @@ function CreateProfile() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const uid = auth.currentUser.uid; // Get the current user's UID
-        const userRef = doc(db, 'users', uid); // Create a reference to the Firestore document
+        const uid = auth.currentUser.uid;
+        const userRef = doc(db, 'users', uid);
         try {
             await setDoc(userRef, profile); // Save the profile data
+            await updateProfile(auth.currentUser, { displayName: `${profile.firstName} ${profile.lastName.charAt(0)}` });
             console.log('Profile created successfully');
             navigate('/dashboard'); // Navigate to dashboard after success
         } catch (error) {
