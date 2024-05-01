@@ -1,13 +1,13 @@
 import './App.css';
 import NavBar from './components/NavBar';
-import SignIn from './components/SignIn';
+import SignIn from './components/Authentication/SignIn';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { auth, db } from './config/firebase';
 import { useEffect, useState } from 'react';
-import SignUp from './components/SignUp';
-import Notes from './components/Notes';
-import EditProfile from './components/EditProfile';
-import CreateProfile from './components/CreateProfile';
+import SignUp from './components/Authentication/SignUp';
+import Notes from './components/Notes/Notes';
+import EditProfile from './components/Profile/EditProfile';
+import CreateProfile from './components/Profile/CreateProfile';
 function App() {
   const [user, setUser] = useState(null);
   

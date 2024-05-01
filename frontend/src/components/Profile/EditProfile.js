@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../config/firebase';
+import { auth, db } from '../../config/firebase';
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';

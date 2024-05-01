@@ -18,7 +18,7 @@ import { blue } from '@mui/material/colors';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import {createUserWithEmailAndPassword} from 'firebase/auth'
-import { auth } from '../config/firebase';
+import { auth } from '../../config/firebase';
 import { updateProfile } from "firebase/auth";
 
 function Copyright(props) {

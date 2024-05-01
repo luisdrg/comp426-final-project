@@ -19,6 +19,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import AddNote from './AddNote';
+import Editnote from './EditNote';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -75,19 +76,20 @@ export default function Notes() {
 
   const deleteNote = (id) => () => {
     setNotes(notes.filter((note) => note.id !== id));
-    handleClose();  // Ensure to close the menu after deleting
+    handleClose(); 
   };
 
   const viewNote = (id) => () => {
     console.log(id);
-    handleClose();  // Ensure to close the menu after viewing
+    handleClose();
   };
 
   const editNote = (id) => () => {
     console.log(id);
     const note = data.find(note => note.id === id);
     console.log(note.mood);
-    handleClose();  // Ensure to close the menu after viewing
+    handleClose();
+    
   };
 
   const handleClick = (event, id) => {
@@ -153,8 +155,9 @@ export default function Notes() {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={viewNote(selectedItemId)}>View</MenuItem>
-                  <MenuItem onClick={editNote(selectedItemId)}>Edit</MenuItem>
+                  <MenuItem onClick={viewNote(selectedItemId)}>
+                    <Editnote></Editnote>
+                  </MenuItem>
                   <MenuItem onClick={deleteNote(selectedItemId)} sx={{ color: 'red' }}>Delete</MenuItem>
                 </Menu>
               </ListItemButton>

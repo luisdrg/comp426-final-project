@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { auth } from '../config/firebase';
+import { auth } from '../../config/firebase';
 import {signInWithEmailAndPassword} from 'firebase/auth'
 import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
