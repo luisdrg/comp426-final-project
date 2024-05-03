@@ -50,7 +50,6 @@ app.get('/users/:id', (req, res) => {
         const userId = req.params.id;
         const userRef = doc(db, 'users', userId);
         const docSnap = await getDocs(userRef);
- 
         if (docSnap.exists()) {
             res.status(200).send({ id: docSnap.id, ...docSnap.data() });
         } else {
@@ -65,8 +64,9 @@ app.get('/users/:id', (req, res) => {
 app.post('/users', (req, res) => {
     try {
         const userData = req.body;
-        const docRef = await addDoc(collection(db, "users"), userData);
-        console.log("User created with ID: ", docRef.id);
+        const newUserRef = doc(collection(db, "users"));
+        await setDoc(newUserRef, userData);
+        res.status(200).send({ id: newUserRef, ...userData });
     } 
     catch (error) {
         console.log(error);
