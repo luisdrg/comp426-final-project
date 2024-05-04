@@ -16,7 +16,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
 
-export default function Editnote() {
+export default function EditNote() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

@@ -23,6 +23,7 @@ import Editnote from './EditNote';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import DeleteNote from './DeleteNote';
 
 const data = [
   {
@@ -74,22 +75,15 @@ export default function Notes() {
   const [notes, setNotes] = useState(data);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  const deleteNote = (id) => () => {
-    setNotes(notes.filter((note) => note.id !== id));
-    handleClose(); 
-  };
-
-  const viewNote = (id) => () => {
-    console.log(id);
+  const deleteNote = (noteID) => {
+    console.log('in Notes')
+    setNotes(notes.filter(note => note.id !== noteID));
     handleClose();
-  };
+};
 
   const editNote = (id) => () => {
     console.log(id);
-    const note = data.find(note => note.id === id);
-    console.log(note.mood);
     handleClose();
-    
   };
 
   const handleClick = (event, id) => {
@@ -103,15 +97,15 @@ export default function Notes() {
   };
 
    // Function to add a new note
-  //  const addNote = () => {
-  //   const newNote = {
-  //     id: notes.length + 1, // Assign a new ID
-  //     primary: 'New Note',
-  //     secondary: 'Description of the new note',
-  //     mood: 'good' // You can set a default or make this dynamic
-  //   };
-  //   setNotes([...notes, newNote]);
-  // };
+   const addNote = () => {
+    const newNote = {
+      id: notes.length + 1,
+      primary: 'New Note',
+      secondary: 'Description of the new note',
+      mood: 'good'
+    };
+    setNotes([...notes, newNote]);
+  };
 
   return (
     <React.Fragment>
@@ -155,10 +149,12 @@ export default function Notes() {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={viewNote(selectedItemId)}>
-                    <Editnote></Editnote>
+                  <MenuItem onClick={editNote(selectedItemId)}>
+                    <Editnote  noteID={selectedItemId}/>
                   </MenuItem>
-                  <MenuItem onClick={deleteNote(selectedItemId)} sx={{ color: 'red' }}>Delete</MenuItem>
+                  <MenuItem  sx={{ color: 'red' }}>
+                  <DeleteNote noteID={selectedItemId} onDelete={deleteNote}/>
+                  </MenuItem>
                 </Menu>
               </ListItemButton>
             </React.Fragment>
