@@ -45,7 +45,7 @@ app.get('/users', async (req, res) => {
     }
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const userRef = doc(db, 'users', userId);
@@ -61,7 +61,7 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     try {
         const userData = req.body;
         const newUserRef = doc(collection(db, "users"));
@@ -74,7 +74,7 @@ app.post('/users', (req, res) => {
     }
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const userData = req.body;
@@ -91,7 +91,7 @@ app.put('/users/:id', (req, res) => {
     }
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', async (req, res) => {
     try {
         await deleteDoc(doc(db, "users", req.params.id));
         console.log("User deleted with ID: ", req.params.id);
