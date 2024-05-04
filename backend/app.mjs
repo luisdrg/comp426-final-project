@@ -46,23 +46,60 @@ app.get('/users', async (req, res) => {
 });
 
 app.get('/users/:id', (req, res) => {
-    // Replace with your code
-    res.status(500).send("Needs to be implemented");
+    try {
+        const userId = req.params.id;
+        const userRef = doc(db, 'users', userId);
+        const docSnap = await getDocs(userRef);
+        if (docSnap.exists()) {
+            res.status(200).send({ id: docSnap.id, ...docSnap.data() });
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.toString());
+    }
 });
 
 app.post('/users', (req, res) => {
-    // Replace with your code
-    res.status(500).send("Needs to be implemented");
-})
+    try {
+        const userData = req.body;
+        const newUserRef = doc(collection(db, "users"));
+        await setDoc(newUserRef, userData);
+        res.status(200).send({ id: newUserRef, ...userData });
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).send(error.toString());
+    }
+});
 
 app.put('/users/:id', (req, res) => {
-    // Replace with your code
-    res.status(500).send("Needs to be implemented");
-})
+    try {
+        const userId = req.params.id;
+        const userData = req.body;
+        const userRef = doc(db, 'users', userId);
+        await updateDoc(userRef, userData);
+        res.status(200).send({ id: userId, ...userData });
+    } catch (error) {
+        console.log(error);
+        if (error.code === 'not-found') {
+            res.status(404).send('User not found');
+        } else {
+            res.status(500).send(error.toString());
+        }
+    }
+});
 
 app.delete('/users/:id', (req, res) => {
-    // Replace with your code
-    res.status(500).send("Needs to be implemented");
+    try {
+        await deleteDoc(doc(db, "users", req.params.id));
+        console.log("User deleted with ID: ", req.params.id);
+    } 
+    catch (error) {
+        console.log(error);
+        res.status(500).send(error.toString());
+    } 
 })
 
 
