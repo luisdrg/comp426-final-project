@@ -23,7 +23,7 @@ const db =  getFirestore(appFB);
  
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 const port = 4000;
  
 app.get('/test', (req, res) => {
@@ -103,6 +103,62 @@ app.delete('/users/:id', async (req, res) => {
         res.status(500).send(error.toString());
     } 
 })
+
+
+// Create a new note 
+app.post('/api/users/:userId/notes', async (req, res) => {
+    try {
+        const { userId } = req.params; 
+        const { title, note } = req.body;
+        console.log('Received request to add new note:'); 
+        console.log('userId:', userId);
+        console.log('title:', title);
+        console.log('note:', note);
+        const noteId = await addNewNote(userId, { title, note });
+        res.status(201).json({ message: `New note created with ID: ${noteId}` }); 
+    } catch (error) {
+        console.error('Error creating note:', error);
+        res.status(500).json({ error: 'Error creating note' }); 
+    }
+});
+
+// Get all notes for a specific user 
+app.get('/api/users/:userId/notes', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        console.log("Received request to fetch notes for user:", userId); 
+        const notes = await getAllNotes(userId);
+        console.log("Notes fetched successfully:", notes); res.json(notes);
+    } catch (error) {
+        console.error('Error fetching notes:', error); 
+        res.status(500).json({ error: 'Error fetching notes' });
+    } 
+});
+
+// Update a note for a specific user
+app.put('/api/users/:userId/notes/:noteId', async (req, res) => { 
+    try {
+        const { userId, noteId } = req.params;
+        const { title, note } = req.body;
+        await updateNote({ userId, noteId, title, note }); 
+        res.json({ message: 'Note updated successfully' });
+    } catch (error) {
+        console.error('Error updating note:', error); 
+        res.status(500).json({ error: 'Error updating note' });
+    } 
+});
+
+// Delete a note for a specific user 
+app.delete('/api/users/:userId/notes/:noteId', async (req, res) => {
+    try {
+        const { userId, noteId } = req.params;
+        await deleteNote({ userId, noteId });
+        res.json({ message: 'Note deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting note:', error); 
+        res.status(500).json({ error: 'Error deleting note' });
+    } 
+});
 
 
  
