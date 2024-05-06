@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { addNewNote, getAllNotes, updateNote, deleteNote } from './NoteService.mjs';
  
 dotenv.config();
 const firebaseConfig = {
