@@ -20,7 +20,7 @@ const firebaseConfig = {
  
 const appFB = initializeApp(firebaseConfig);
 const auth = getAuth(appFB);
-const db =  getFirestore(appFB);
+export const db =  getFirestore(appFB);
  
 const app = express();
 app.use(cors());

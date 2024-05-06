@@ -1,5 +1,5 @@
 import { db } from './app.mjs';
-import { doc, collection, addDoc,getDocs, updateDoc,deleteDoc} from 'firebase/firestore';
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc} from 'firebase/firestore';
 
 
 // Create new note for a specific user
