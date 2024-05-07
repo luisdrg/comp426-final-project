@@ -12,7 +12,7 @@ export const addNewNote = async (userId, { title, note, mood }) => {
         console.log('mood:', mood);
         const userRef = doc(db, 'users', userId);
         const notesCollectionRef = collection(userRef, 'Notes');
-        const newNoteRef = await addDoc(notesCollectionRef, { title, note, mood });
+        const newNoteRef = await addDoc(notesCollectionRef, { title, note, mood, dateCreated: new Date().toLocaleString()});
         
         console.log('New note added with ID:', newNoteRef.id);
         return newNoteRef.id; 
@@ -34,7 +34,7 @@ export const getAllNotes = async (userId) => {
         // Check if data exists (document is not empty) 
         if (data) {
         // Push note data to the notes array
-        notes.push({ id: doc.id, title: data.title, note: data.note }); 
+        notes.push({ id: doc.id, title: data.title, note: data.note, mood: data.mood, dateCreated: data.dateCreated }); 
         }
         });
         console.log('Notes fetched successfully:', notes);

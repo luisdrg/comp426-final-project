@@ -5,12 +5,14 @@ const useNotes = (initialNotes) => {
 
   useEffect(() => {
     // If initialNotes are loaded asynchronously, handle that logic here or in the parent component.
-    setNotes(initialNotes);
+    const sortedNotes = [...initialNotes].sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+    setNotes(sortedNotes);
   }, [initialNotes]);
 
-  const addNote = (newNote) => {
-    setNotes(currentNotes => [...currentNotes, { ...newNote, id: Math.random() }]);
+  const addNote = (newNoteData) => {
+    setNotes(prevNotes => [{...newNoteData, dateCreated: new Date().toLocaleString()}, ...prevNotes]);
   };
+
 
   const deleteNote = (id) => {
     setNotes(currentNotes => currentNotes.filter(note => note.id !== id));

@@ -24,32 +24,17 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import DeleteNote from './DeleteNote';
-import useNotes from './useNotes'
+import { useNotesContext } from '../../NotesContext';
 
-export default function Notes({data}) {
+export default function Notes() {
+  
   const [anchorEl, setAnchorEl] = useState(null);
-  const { notes, addNote, deleteNote, updateNote } = useNotes(data);
+  const { notes, addNote, deleteNote, updateNote } = useNotesContext();
   const [selectedItemId, setSelectedItemId] = useState("");
-    
-//    const addNewNote = (formJson) => {
-//     const newNote = {
-//       id: notes.length + 2,
-//       title: formJson.title,
-//       note: formJson.note,
-//       mood: formJson.mood
-//     };
-//     setData([...data, newNote]);
-//   };
-//   const deleteCurrentNote = (noteID) => {
-//     console.log('in Notes')
-//     setData(data.filter(note => note.id !== noteID));
-//     handleClose();
-// };
 
-//   const editNote = (id) => () => {
-//     console.log(id);
-//     handleClose();
-//   };
+  useEffect(() => {
+    console.log("In useEffect for Notes.js");
+  }, [notes]);
 
   const handleClick = (event, id) => {
     setAnchorEl(event.currentTarget);
@@ -60,7 +45,6 @@ export default function Notes({data}) {
     setAnchorEl(null);
     setSelectedItemId(null);
   };
-
 
 
   return (

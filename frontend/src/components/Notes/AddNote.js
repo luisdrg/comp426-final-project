@@ -45,22 +45,14 @@ export default function Addnote({onAdd}) {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     const userId = auth.currentUser.uid;
-    // try {
-    //   const response = await axios.post(`http://localhost:4000/api/users/${userId}/notes`, formJson);
-    //   console.log(response.data);
-    //   onAdd(formJson);
-    //   handleClose();
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-
-
-
-     //delete this below and use it in the try and catch when you fix firestore usage issue........
-    console.log(userId);
-    console.log(formJson);
-    onAdd(formJson);
-    handleClose();
+    try {
+      const response = await axios.post(`http://localhost:4000/api/users/${userId}/notes`, formJson);
+      console.log(response.data);
+      onAdd(formJson);
+      handleClose();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   
   return (
