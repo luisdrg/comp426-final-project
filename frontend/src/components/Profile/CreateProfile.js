@@ -124,7 +124,7 @@ function CreateProfile() {
                     fullWidth
                 >
                     <MenuItem value="dog">Dogs</MenuItem>
-                    <MenuItem value="cat">Cats</MenuItem>
+                    <MenuItem value="not cat">Not Cats</MenuItem>
                     <MenuItem value="both">Both</MenuItem>
                 </Select>
             </FormControl>

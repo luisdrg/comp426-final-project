@@ -6,7 +6,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
@@ -14,10 +13,11 @@ import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import AddIcon from '@mui/icons-material/Add';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import { auth, db } from '../../config/firebase'
+import { auth } from '../../config/firebase';
 import axios from 'axios';
 
 const StyledFab = styled(Fab)({
@@ -31,6 +31,10 @@ const StyledFab = styled(Fab)({
 
 export default function Addnote({onAdd}) {
   const [open, setOpen] = React.useState(false);
+  const [showImagePopup, setShowImagePopup] = React.useState(false);
+  const [dogFact, setDogFact] = React.useState('');
+  const [dogPic, setDogPic] = React.useState('');
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,6 +42,19 @@ export default function Addnote({onAdd}) {
 
   const handleClose = () => {
     setOpen(false);
+    setShowImagePopup(false);  // Also reset the image popup state
+  };
+
+  const fetchDogData = async () => {
+    try {
+      const factResponse = await axios.get('http://localhost:4000/api/facts');
+      const picResponse = await axios.get('http://localhost:4000/api/pics');
+      setDogFact(factResponse.data[0]); // Assuming the fact API returns an array of facts
+      setDogPic(picResponse.data.message);   // Assuming the pic API returns the image URL in 'message' field
+      setShowImagePopup(true);
+    } catch (error) {
+      console.error("Error fetching dog data:", error);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -50,11 +67,14 @@ export default function Addnote({onAdd}) {
       console.log(response.data);
       onAdd(formJson);
       handleClose();
+      if (formJson.mood === 'bad') {
+        await fetchDogData();
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
+
   return (
     <React.Fragment>
       <StyledFab color="secondary" aria-label="add" onClick={handleClickOpen}>
@@ -85,7 +105,6 @@ export default function Addnote({onAdd}) {
             variant="standard"
           />
           <TextField
-            autoFocus
             required
             margin="dense"
             id="note"
@@ -98,9 +117,7 @@ export default function Addnote({onAdd}) {
             sx={{ mb: 5 }}
           />
           <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label" sx={{ mb: 2 }}>
-            What is your mood?
-          </FormLabel>
+            <FormLabel id="demo-radio-buttons-group-label">What is your mood?</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="ok"
@@ -108,7 +125,7 @@ export default function Addnote({onAdd}) {
             >
               <FormControlLabel 
                 value="bad" 
-                control={<Radio/>} 
+                control={<Radio />} 
                 label={<SentimentVeryDissatisfiedIcon style={{ color: 'red', fontSize: '40px' }} />}
               />
               <FormControlLabel 
@@ -129,6 +146,22 @@ export default function Addnote({onAdd}) {
           <Button type="submit">Save</Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+        open={showImagePopup}
+        onClose={() => setShowImagePopup(false)}
+      >
+        <DialogTitle>Need a Smile?</DialogTitle>
+        <DialogContent>
+          <img src={dogPic} alt="Cute Dog" style={{ width: '100%' }} />
+          <DialogContentText sx={{ mt: 2 }}>
+            Random Fact: {dogFact}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowImagePopup(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
     </React.Fragment>
   );
 }

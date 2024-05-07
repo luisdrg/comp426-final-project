@@ -31,14 +31,21 @@ export default function Notes() {
   const [anchorEl, setAnchorEl] = useState(null);
   const { notes, addNote, deleteNote, updateNote } = useNotesContext();
   const [selectedItemId, setSelectedItemId] = useState("");
+  const [titles, setTitle] = useState('');
+  const [nota, setNote] = useState('');
+  const [moods, setMood] = useState('');
 
+  
   useEffect(() => {
     console.log("In useEffect for Notes.js");
   }, [notes]);
 
-  const handleClick = (event, id) => {
+  const handleClick = (event, id, title, note, mood) => {
     setAnchorEl(event.currentTarget);
     setSelectedItemId(id);
+    setTitle(title);
+    setMood(mood);
+    setNote(note);
   };
 
   const handleClose = () => {
@@ -56,7 +63,7 @@ export default function Notes() {
           <hr style={{ borderColor: 'black', width: '100%', margin: '20px auto' }}/>
         </Typography>
         <List sx={{ mb: 2 }}>
-          {notes.map(({ id, title, note, mood }) => (
+          {notes.map(({ id, title, note, mood, dateCreated }) => (
             <React.Fragment key={id}>
               {id === 1 && (
                 <ListSubheader sx={{ bgcolor: 'background.paper' }}>
@@ -78,8 +85,16 @@ export default function Notes() {
                   : <SentimentSatisfiedIcon style={{ color: 'green', fontSize: '40px' }}/>}
                 </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={title} secondary={note} />
-                <IconButton color="inherit" onClick={(event) => handleClick(event, id)}>
+                <ListItemText 
+                primary={title} 
+                secondary={
+                    <>
+                    {`Note: ${note}`}
+                    <br />
+                    {`Created on: ${dateCreated}`}
+                  </>
+                }/>
+                <IconButton color="inherit" onClick={(event) => handleClick(event, id, title, note, mood)}>
                   <MoreIcon />
                 </IconButton>
                 <Menu
@@ -90,7 +105,7 @@ export default function Notes() {
                   onClose={handleClose}
                 >
                   <MenuItem>
-                    <Editnote  noteID={selectedItemId} onUpdateNote={updateNote}/>
+                    <Editnote titles={titles} nota={nota} moods={moods} noteID={selectedItemId} onUpdateNote={updateNote}/>
                   </MenuItem>
                   <MenuItem  sx={{ color: 'red' }}>
                   <DeleteNote noteID={selectedItemId} onDeleteNote={deleteNote}/>

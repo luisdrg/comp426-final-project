@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import dotenv from 'dotenv';
+import axios from 'axios'
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, getDoc, doc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
@@ -161,6 +162,29 @@ app.delete('/api/users/:userId/notes/:noteId', async (req, res) => {
         res.status(500).json({ error: 'Error deleting note' });
     } 
 });
+
+
+
+////3RD PARTY API//////
+app.get('/api/facts', async (req, res) => {
+    try {
+      const response = await axios.get('http://dog-api.kinduff.com/api/facts');
+      res.send(response.data.facts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred while fetching data from the API');
+    }
+  });
+  
+  app.get('/api/pics', async (req, res) => {
+    try {
+      const response = await axios.get('https://dog.ceo/api/breeds/image/random');
+      res.send(response.data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred while fetching data from the API');
+    }
+  });
 
 
  

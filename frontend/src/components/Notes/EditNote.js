@@ -17,9 +17,9 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import { auth } from '../../config/firebase'
 import axios from 'axios';
 
-export default function EditNote({onUpdateNote, noteID}) {
+export default function EditNote({onUpdateNote, noteID, titles, nota, moods}) {
   const [open, setOpen] = React.useState(false);
-
+  console.log(titles, nota, moods)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -33,13 +33,12 @@ export default function EditNote({onUpdateNote, noteID}) {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     const userId = auth.currentUser.uid;
-    console.log(noteID);
     try {
       const response = await axios.put(`http://localhost:4000/api/users/${userId}/notes/${noteID}`, formJson);
       console.log(response.data);
-      onUpdateNote(formJson);
+      onUpdateNote(noteID, formJson);
       handleClose();
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -73,6 +72,7 @@ export default function EditNote({onUpdateNote, noteID}) {
             type="text"
             fullWidth
             variant="standard"
+            defaultValue={titles}
           />
           <TextField
             autoFocus
@@ -85,6 +85,7 @@ export default function EditNote({onUpdateNote, noteID}) {
             fullWidth
             variant="standard"
             multiline
+            defaultValue={nota}
             sx={{ mb: 5 }}
           />
           <FormControl>
@@ -93,7 +94,7 @@ export default function EditNote({onUpdateNote, noteID}) {
           </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="ok"
+              defaultValue={moods}
               name="mood"
             >
               <FormControlLabel 
