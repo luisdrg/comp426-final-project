@@ -90,10 +90,10 @@ export default function Notes() {
                   onClose={handleClose}
                 >
                   <MenuItem>
-                    <Editnote  noteID={selectedItemId}/>
+                    <Editnote  noteID={selectedItemId} onUpdateNote={updateNote}/>
                   </MenuItem>
                   <MenuItem  sx={{ color: 'red' }}>
-                  <DeleteNote/>
+                  <DeleteNote noteID={selectedItemId} onDeleteNote={deleteNote}/>
                   </MenuItem>
                 </Menu>
               </ListItemButton>

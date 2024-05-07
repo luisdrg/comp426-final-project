@@ -45,7 +45,7 @@ export const getAllNotes = async (userId) => {
     }
 };
 
-export const updateNote = async ({ userId, noteId, title, note }) => {
+export const updateNote = async ({ userId, noteId, title, note, mood }) => {
     try {
     // Get a reference to the user's document
     const userRef = doc(db, 'users', userId);
@@ -54,7 +54,8 @@ export const updateNote = async ({ userId, noteId, title, note }) => {
     // Update the note's document with the new title and note content 
     await updateDoc(noteRef, {
         title,
-        note 
+        note,
+        mood 
     });
     console.log('Note updated successfully'); 
     } catch (error) {
@@ -69,7 +70,7 @@ export const deleteNote = async ({ userId, noteId }) => {
     // Get a reference to the user's document
     const userRef = doc(db, 'users', userId);
     // Get a reference to the note's document inside the user's document 
-    const noteRef = doc(collection(userRef, 'notes'), noteId);
+    const noteRef = doc(collection(userRef, 'Notes'), noteId);
     // Delete the note's document
     await deleteDoc(noteRef);
     console.log('Note deleted successfully');

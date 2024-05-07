@@ -16,6 +16,7 @@ const useNotes = (initialNotes) => {
 
   const deleteNote = (id) => {
     setNotes(currentNotes => currentNotes.filter(note => note.id !== id));
+    console.log('In deleteNote useNotes hook', id)
   };
 
   const updateNote = (id, updatedDetails) => {

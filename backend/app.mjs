@@ -141,8 +141,8 @@ app.get('/api/users/:userId/notes', async (req, res) => {
 app.put('/api/users/:userId/notes/:noteId', async (req, res) => { 
     try {
         const { userId, noteId } = req.params;
-        const { title, note } = req.body;
-        await updateNote({ userId, noteId, title, note }); 
+        const { title, note, mood } = req.body;
+        await updateNote({ userId, noteId, title, note, mood }); 
         res.json({ message: 'Note updated successfully' });
     } catch (error) {
         console.error('Error updating note:', error); 

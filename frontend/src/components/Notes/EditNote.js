@@ -14,9 +14,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import { auth } from '../../config/firebase'
+import axios from 'axios';
 
-
-export default function EditNote() {
+export default function EditNote({onUpdateNote, noteID}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -25,6 +26,23 @@ export default function EditNote() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formJson = Object.fromEntries(formData.entries());
+    const userId = auth.currentUser.uid;
+    console.log(noteID);
+    try {
+      const response = await axios.put(`http://localhost:4000/api/users/${userId}/notes/${noteID}`, formJson);
+      console.log(response.data);
+      onUpdateNote(formJson);
+      handleClose();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -37,13 +55,7 @@ export default function EditNote() {
         onClose={handleClose}
         PaperProps={{
           component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson); // Output the form data to console
-            handleClose();
-          },
+          onSubmit: handleSubmit,
         }}
       >
         <DialogTitle>Editing Note</DialogTitle>
@@ -56,7 +68,7 @@ export default function EditNote() {
             required
             margin="dense"
             id="title"
-            name="Title"
+            name="title"
             label="Title"
             type="text"
             fullWidth
