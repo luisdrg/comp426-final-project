@@ -8,17 +8,49 @@ import SignUp from './components/Authentication/SignUp';
 import Notes from './components/Notes/Notes';
 import EditProfile from './components/Profile/EditProfile';
 import CreateProfile from './components/Profile/CreateProfile';
+import Dashboard from './components/Dashboard';
+import axios from 'axios';
+import { mockData } from './mock_data';
+
 function App() {
   const [user, setUser] = useState(null);
-  
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setUser(user);
-    });
+  const [data, setData] = useState([]);
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+// Handle auth state changes
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(user => {
+    setUser(user);
+  });
+
+  // Cleanup subscription on unmount
+  return () => unsubscribe();
+}, []);
+
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+    setUser(currentUser);
+    if (currentUser) {
+      fetchData(currentUser);
+    } else {
+      console.log("User not authenticated");
+      setData([]); // Clear any previously loaded data
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
+const fetchData = async (currentUser) => {
+  try {
+    const userId = currentUser.uid;
+    const response = await axios.get(`http://localhost:4000/api/users/${userId}/notes`);
+    console.log("Fetched data:", response.data);
+    setData(response.data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
 
   return (
     <div className="App">
@@ -28,8 +60,9 @@ function App() {
           <div style={{ paddingTop: '120px' }}>
           <Routes>
             <Route path="/profile" element={<EditProfile />} />
+            <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/create" element={<CreateProfile />} />
-            <Route path="/" element={<Notes />} />
+            <Route path="/" element={<Notes data={data}/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           </div>

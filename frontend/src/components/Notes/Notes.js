@@ -17,74 +17,39 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddNote from './AddNote';
 import Editnote from './EditNote';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import DeleteNote from './DeleteNote';
+import useNotes from './useNotes'
 
-const data = [
-  {
-    id: 1,
-    primary: 'Morning Jog',
-    secondary: "Planning to start the day with a morning jog at the park. It's a great way to clear my mind.",
-    mood: 'good',
-  },
-  {
-    id: 2,
-    primary: 'Project Deadline',
-    secondary: "The project deadline is approaching fast. Feeling a bit stressed about getting everything done on time.",
-    mood: 'bad',
-  },
-  {
-    id: 3,
-    primary: 'Weekend Plans',
-    secondary: "Looking forward to the weekend getaway. Hoping the weather stays nice!",
-    mood: 'good',
-  },
-  {
-    id: 4,
-    primary: 'Gym Session',
-    secondary: "Missed my gym session today because I had to work late. Planning to make up for it tomorrow.",
-    mood: 'ok',
-  },
-  {
-    id: 5,
-    primary: "Car Repair",
-    secondary: "The car is finally getting repaired this Thursday. It’s been overdue for a maintenance check.",
-    mood: 'bad',
-  },
-  {
-    id: 6,
-    primary: 'Book Club Meeting',
-    secondary: "Our book club is meeting this Sunday to discuss the latest read. Can't wait to hear everyone's thoughts.",
-    mood: 'ok',
-  },
-  {
-    id: 7,
-    primary: 'Garden Update',
-    secondary: "Spent the afternoon gardening. The new flowers are starting to bloom beautifully.",
-    mood: 'good',
-  },
-];
-
-export default function Notes() {
+export default function Notes({data}) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notes, setNotes] = useState(data);
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const { notes, addNote, deleteNote, updateNote } = useNotes(data);
+  const [selectedItemId, setSelectedItemId] = useState("");
+    
+//    const addNewNote = (formJson) => {
+//     const newNote = {
+//       id: notes.length + 2,
+//       title: formJson.title,
+//       note: formJson.note,
+//       mood: formJson.mood
+//     };
+//     setData([...data, newNote]);
+//   };
+//   const deleteCurrentNote = (noteID) => {
+//     console.log('in Notes')
+//     setData(data.filter(note => note.id !== noteID));
+//     handleClose();
+// };
 
-  const deleteNote = (noteID) => {
-    console.log('in Notes')
-    setNotes(notes.filter(note => note.id !== noteID));
-    handleClose();
-};
-
-  const editNote = (id) => () => {
-    console.log(id);
-    handleClose();
-  };
+//   const editNote = (id) => () => {
+//     console.log(id);
+//     handleClose();
+//   };
 
   const handleClick = (event, id) => {
     setAnchorEl(event.currentTarget);
@@ -96,16 +61,7 @@ export default function Notes() {
     setSelectedItemId(null);
   };
 
-   // Function to add a new note
-   const addNote = () => {
-    const newNote = {
-      id: notes.length + 1,
-      primary: 'New Note',
-      secondary: 'Description of the new note',
-      mood: 'good'
-    };
-    setNotes([...notes, newNote]);
-  };
+
 
   return (
     <React.Fragment>
@@ -116,7 +72,7 @@ export default function Notes() {
           <hr style={{ borderColor: 'black', width: '100%', margin: '20px auto' }}/>
         </Typography>
         <List sx={{ mb: 2 }}>
-          {notes.map(({ id, primary, secondary, mood }) => (
+          {notes.map(({ id, title, note, mood }) => (
             <React.Fragment key={id}>
               {id === 1 && (
                 <ListSubheader sx={{ bgcolor: 'background.paper' }}>
@@ -138,7 +94,7 @@ export default function Notes() {
                   : <SentimentSatisfiedIcon style={{ color: 'green', fontSize: '40px' }}/>}
                 </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={primary} secondary={secondary} />
+                <ListItemText primary={title} secondary={note} />
                 <IconButton color="inherit" onClick={(event) => handleClick(event, id)}>
                   <MoreIcon />
                 </IconButton>
@@ -149,11 +105,11 @@ export default function Notes() {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={editNote(selectedItemId)}>
+                  <MenuItem>
                     <Editnote  noteID={selectedItemId}/>
                   </MenuItem>
                   <MenuItem  sx={{ color: 'red' }}>
-                  <DeleteNote noteID={selectedItemId} onDelete={deleteNote}/>
+                  <DeleteNote/>
                   </MenuItem>
                 </Menu>
               </ListItemButton>
@@ -166,7 +122,7 @@ export default function Notes() {
           <IconButton color="inherit" aria-label="open drawer">
             <MenuIcon />
           </IconButton>
-            <AddNote/>
+            <AddNote onAdd={addNote}/>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton color="inherit">
             <SearchIcon />

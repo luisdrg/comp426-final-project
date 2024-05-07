@@ -17,6 +17,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import { auth, db } from '../../config/firebase'
+import axios from 'axios';
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -27,7 +29,7 @@ const StyledFab = styled(Fab)({
   margin: '0 auto',
 });
 
-export default function Addnote() {
+export default function Addnote({onAdd}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -38,6 +40,29 @@ export default function Addnote() {
     setOpen(false);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formJson = Object.fromEntries(formData.entries());
+    const userId = auth.currentUser.uid;
+    // try {
+    //   const response = await axios.post(`http://localhost:4000/api/users/${userId}/notes`, formJson);
+    //   console.log(response.data);
+    //   onAdd(formJson);
+    //   handleClose();
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
+
+
+
+     //delete this below and use it in the try and catch when you fix firestore usage issue........
+    console.log(userId);
+    console.log(formJson);
+    onAdd(formJson);
+    handleClose();
+  };
+  
   return (
     <React.Fragment>
       <StyledFab color="secondary" aria-label="add" onClick={handleClickOpen}>
@@ -48,13 +73,7 @@ export default function Addnote() {
         onClose={handleClose}
         PaperProps={{
           component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson); // Output the form data to console
-            handleClose();
-          },
+          onSubmit: handleSubmit
         }}
       >
         <DialogTitle>Create a Note</DialogTitle>
@@ -67,7 +86,7 @@ export default function Addnote() {
             required
             margin="dense"
             id="title"
-            name="Title"
+            name="title"
             label="Title"
             type="text"
             fullWidth

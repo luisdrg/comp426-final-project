@@ -16,10 +16,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import { logOut } from '../auth';
 import { auth } from '../config/firebase';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 //const pages = ['Products', 'Pricing', 'Blog'];
 const pages = [];
-const settings = ['Profile', 'Dashboard', 'Logout'];
+const settings = [ 'Profile', 'Dashboard', 'Logout'];
 
 
 function NavBar() {
@@ -71,8 +72,8 @@ function NavBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="/dashboard"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -130,8 +131,8 @@ function NavBar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="/dashboard"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },

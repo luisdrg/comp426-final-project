@@ -110,12 +110,13 @@ app.delete('/users/:id', async (req, res) => {
 app.post('/api/users/:userId/notes', async (req, res) => {
     try {
         const { userId } = req.params; 
-        const { title, note } = req.body;
+        const { title, note, mood } = req.body;
         console.log('Received request to add new note:'); 
         console.log('userId:', userId);
         console.log('title:', title);
         console.log('note:', note);
-        const noteId = await addNewNote(userId, { title, note });
+        console.log('mood:', mood);
+        const noteId = await addNewNote(userId, { title, note, mood });
         res.status(201).json({ message: `New note created with ID: ${noteId}` }); 
     } catch (error) {
         console.error('Error creating note:', error);

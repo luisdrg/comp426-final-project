@@ -3,16 +3,16 @@ import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc} from 'firebase/
 
 
 // Create new note for a specific user
-export const addNewNote = async (userId, { title, note }) => {
+export const addNewNote = async (userId, { title, note, mood }) => {
     try {
         console.log('Adding new note:'); 
         console.log('userId:', userId); 
         console.log('title:', title); 
         console.log('note:', note);
-
+        console.log('mood:', mood);
         const userRef = doc(db, 'users', userId);
         const notesCollectionRef = collection(userRef, 'Notes');
-        const newNoteRef = await addDoc(notesCollectionRef, { title, note });
+        const newNoteRef = await addDoc(notesCollectionRef, { title, note, mood });
         
         console.log('New note added with ID:', newNoteRef.id);
         return newNoteRef.id; 
