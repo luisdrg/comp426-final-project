@@ -90,5 +90,6 @@ On success, returns a success message indicating the note was deleted. Generates
 ### External APIs
     GET /api/facts
 On success, returns a JSON object containing a random dog fact. Generates a 500 response if there is an error fetching the data.
+
     GET /api/pics
 On success, returns a JSON object containing a random dog image. Generates a 500 response if there is an error fetching the image.
