@@ -4,14 +4,14 @@
 This application provides an API for managing user data and notes, built with Express.js and Firebase. It allows operations such as adding, retrieving, updating, and deleting users and their notes. A unique feature of this application is the capability for users to include a mood indicator with each note, allowing for an enhanced personal documentation experience. Additionally, it includes endpoints to fetch random dog facts and images from external APIs.
 
 ## Features
-* User Management: Create, read, update, and delete users in the database.
-* Note Management: Each user can add, update, retrieve, and delete personal notes with a title, note content, and mood indicator.
-* External Data Access: Fetch random dog facts and dog pictures from third-party APIs.
+* **User Management**: Create, read, update, and delete users in the database.
+* **Note Management**: Each user can add, update, retrieve, and delete personal notes with a title, note content, and mood indicator.
+* **External Data Access**: Fetch random dog facts and dog pictures from third-party APIs.
 
 ## Technologies Used
-* Node.js and Express.js: Server-side framework
-* Firebase: Used for database operations, authentication, and configuration.
-* Axios: For making HTTP requests to third-party APIs.
+* **Node.js and Express.js**: Server-side framework
+* **Firebase**: Used for database operations, authentication, and configuration.
+* **Axios**: For making HTTP requests to third-party APIs.
 
 ## Getting Started
 1. Install dependencies in both the frontend and backend:
