@@ -1,5 +1,6 @@
 # COMP426 - Final Project
-
+## Demo Video Link
+https://youtu.be/EsT5xm_QpJE?si=XtNVysdFS8AU40Gj
 ## Overview
 This application provides an API for managing user data and notes, built with Express.js and Firebase. It allows operations such as adding, retrieving, updating, and deleting users and their notes. A unique feature of this application is the capability for users to include a mood indicator with each note, allowing for an enhanced personal documentation experience. Additionally, it includes endpoints to fetch random dog facts and images from external APIs.
 
