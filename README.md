@@ -14,12 +14,9 @@ This application provides an API for managing user data and notes, built with Ex
 * **Axios**: For making HTTP requests to third-party APIs.
 
 ## Getting Started
-1. Install dependencies in both the frontend and backend:
-    npm install
-2. Run the backend:
-    node app.mjs
-3. Run the frontend:
-    npm start
+1. Install dependencies in both the frontend and backend: *npm install*
+2. Run the backend: *cd ./backend* and *node app.mjs*
+3. Run the frontend: *cd ./frontend* and *npm start*
 
 ## API Endpoints
 ### User Operations
