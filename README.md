@@ -31,6 +31,7 @@ On success, returns a JSON array of all user objects. Generates a 500 response i
     GET /users/:id
 On success, returns a JSON object for the user with id equal to {id}. Generates a 404 response if no user with that id is available. Generates a 400 response if id is non-numeric or negative. The returned JSON representation of the node includes fields id, lastName, phoneNumber, email, birthdate, firstName, pet, and gender.
 Example:
+
     {
         "id": "UykObc6pt5eZTK0Z7VPBNcqDNKy1",
         "lastName": "James",
@@ -63,6 +64,7 @@ On success, returns a JSON object of the newly created note including fields id,
     GET /api/users/:userId/notes
 On success, returns a JSON array of all notes for the specified user. Generates a 404 response if no notes available for the user. Generates a 400 response if userId is non-numeric or negative.
 Example:
+
     [
         {
             "id": "UiNW6mfBpQsNVGUpmX4P",
